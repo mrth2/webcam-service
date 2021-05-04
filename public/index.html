@@ -1,17 +1,42 @@
 <!DOCTYPE html>
 <html lang="">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+
+
+    <link rel="stylesheet" href="//assets-cdn.ziggeo.com/v2-stable/ziggeo.css"/>
+    <script src="//assets-cdn.ziggeo.com/v2-stable/ziggeo.js"></script>
+    <script type="text/javascript">
+        new ZiggeoApi.V2.Application({
+            token: {
+                "grants": {
+                    "read": {},
+                    "create": {
+                        "resources": [
+                            "token1",
+                            "token2"
+                        ]
+                    },
+                    "update": {}
+                },
+                "session_limit": "5",
+                "usage_expiration_time": "3600"
+            },
+            webrtc_streaming_if_necessary: true,
+            webrtc_on_mobile: true
+        });
+    </script>
+</head>
+<body>
+<noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
+</noscript>
+<div id="app"></div>
+<!-- built files will be auto injected -->
+</body>
 </html>

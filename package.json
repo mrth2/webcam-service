@@ -8,9 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
+    "@popperjs/core": "^2.9.2",
+    "bootstrap": "^5.0.0-beta3",
+    "core-js": "^3.11.2",
+    "mixpanel-browser": "^2.41.0",
     "register-service-worker": "^1.7.1",
+    "uuid": "^8.3.2",
     "vue": "^3.0.0",
+    "vue-mixpanel": "^1.0.7",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
