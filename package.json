@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
+    "@vimeo/player": "^2.15.0",
+    "axios": "^0.21.1",
     "bootstrap": "^5.0.0-beta3",
+    "cloudinary-core": "^2.11.4",
     "core-js": "^3.11.2",
     "mixpanel-browser": "^2.41.0",
     "register-service-worker": "^1.7.1",

@@ -6,6 +6,8 @@ import store from './store'
 import VueMixpanel from '@/plugin/mixpanel/index.js'
 import VueCrisp from '@/plugin/crisp/index.js'
 
+window
+
 const app = createApp(App)
 app.use(store)
 app.use(router)

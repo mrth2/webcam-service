@@ -8,13 +8,12 @@
           </div>
           <div class="modal-body">
             <p>Let's sign up to start using our application in 30 seconds</p>
-            <form class="row g-3 needs-validation" :class="{'was-validated': hasError}" @submit.prevent="submitUserInfo"
-                  novalidate>
+            <form class="row g-3 needs-validation" :class="{'was-validated': hasError}" @submit.prevent="submitUserInfo" novalidate>
               <template v-if="!isLoading">
                 <div class="mb-3">
                   <label for="u-name" class="form-label">Your Name</label>
                   <input type="text" class="form-control" id="u-name" placeholder="Enter your name please..."
-                         v-model="nameInput" required>
+                         v-model.trim="nameInput" required>
                   <div class="invalid-feedback" v-if="error.name" v-html="error.name"></div>
                 </div>
                 <div class="mb-3">
@@ -27,7 +26,7 @@
                 <div class="mb-3">
                   <label for="u-location" class="form-label">Your Address</label>
                   <input type="text" class="form-control" id="u-location" placeholder="Enter your location please..."
-                         v-model="locationInput">
+                         v-model.trim="locationInput">
                   <div class="invalid-feedback" v-if="error.location" v-html="error.location"></div>
                 </div>
                 <div class="mb-3">
@@ -35,7 +34,7 @@
                 </div>
               </template>
               <div class="loading" v-else>
-                <img src="src/assets/loading.svg"/>
+                <img src="../assets/loading.svg"/>
               </div>
             </form>
           </div>
@@ -47,31 +46,25 @@
 
 <script>
 import helpers from '@/helpers/helpers.js'
-import {Modal} from 'bootstrap'
+import Modal from 'bootstrap/js/dist/modal'
 
 export default {
   props: ['name', 'email', 'location'],
   data() {
     return {
       isLoading: false,
-      isShow: false,
+      nameInput: '',
+      emailInput: '',
+      locationInput: '',
       error: {
         name: null,
         email: null,
         location: null
-      }
+      },
+      modal: null
     }
   },
   computed: {
-    nameInput() {
-      return this.name
-    },
-    emailInput() {
-      return this.email
-    },
-    locationInput() {
-      return this.location
-    },
     userID() {
       return this.$store.getters['getUserID']
     },
@@ -95,7 +88,7 @@ export default {
       if (!helpers.validateEmail(this.emailInput)) {
         this.error.email = 'Please enter a valid email'
       }
-      if (this.location === '') {
+      if (this.locationInput === '') {
         this.error.location = 'Please enter your address'
       }
       if (this.hasError) return false
@@ -104,6 +97,7 @@ export default {
       this.syncCrisp()
       this.syncMixpanel(() => {
         this.isLoading = false
+        this.modal.hide()
       })
     },
     syncMixpanel(callback) {
@@ -115,6 +109,7 @@ export default {
         "Sign up date": new Date().toISOString(),
         "Location": this.locationInput
       }, () => {
+        this.$mixpanel.alias(this.emailInput)
         if (typeof callback === 'function') callback()
       })
     },
@@ -125,29 +120,40 @@ export default {
       this.$crisp.push(["set", "session:data", [[["userID", this.userID]]]])
     },
     showModal() {
-      new Modal(document.getElementById('modalGatherUserInfo'), {
+      this.modal = new Modal(document.getElementById('modalGatherUserInfo'), {
         backdrop: 'static',
         keyboard: false
-      }).show()
+      })
+      this.modal.show()
     }
   },
   mounted() {
+    if (this.name) this.nameInput = this.name
+    if (this.email) this.emailInput = this.email
+    if (this.location) this.locationInput = this.location
     // mixpanel
     this.$mixpanel.opt_in_tracking()
     // crisp
-    const crispStoredUserEmail = this.$crisp.get("user:email")
+    //const crispStoredUserEmail = this.$crisp.get("user:email")
+    const mixpanelStoredUserEmail = this.$mixpanel.get_property('$email')
     // process props
     if (this.$props.email && this.$props.name && this.$props.location) {
       // sync info to crisp
-      if (crispStoredUserEmail === null) {
+      if (mixpanelStoredUserEmail === null) {
         this.syncCrisp()
       }
       this.syncMixpanel()
     }
     // no stored email => show modal to gather
-    else if (!crispStoredUserEmail) {
+    else if (!mixpanelStoredUserEmail) {
       this.showModal()
     }
   }
 }
 </script>
+
+<style scoped>
+.loading {
+  text-align: center;
+}
+</style>
