@@ -3,10 +3,11 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 col-md-12 mb-4 mb-md-0 align-self-end">
-          <VimeoFeed></VimeoFeed>
+          <vimeo-feed></vimeo-feed>
         </div>
         <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-          <Camera></Camera>
+<!--          <Camera></Camera>-->
+          <ziggeo-mirror></ziggeo-mirror>
         </div>
       </div>
     </div>
@@ -16,16 +17,18 @@
 
 <script>
 // @ is an alias to /src
-import VimeoFeed from '@/components/VimeoFeed.vue'
-import GatherUserInfo from '@/components/GatherUserInfo.vue'
+import VimeoFeed from '@/components/vimeo/VimeoFeed.vue'
+import GatherUserInfo from '@/components/auth/GatherUserInfo.vue'
 import helpers from '@/helpers/helpers.js'
-import Camera from '@/components/Camera.vue'
+//import Camera from '@/components/cloudinary/Camera.vue'
+import ZiggeoMirror from '@/components/ziggeo/ZiggeoMirror.vue'
 
 export default {
   name: 'Home',
   components: {
     VimeoFeed,
-    Camera,
+    //Camera,
+    ZiggeoMirror,
     GatherUserInfo
   },
   props: {

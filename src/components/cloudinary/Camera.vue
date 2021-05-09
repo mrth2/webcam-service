@@ -79,7 +79,7 @@ async function uploadToCloudinary(cloudName, preset, fileData) {
 // import cloudinary from "cloudinary-core"
 import axios from "axios"
 import {mapState} from "vuex"
-import Btn from '@/components/Button.vue'
+import Btn from '@/components/global/Button.vue'
 
 export default {
   components: {
@@ -106,9 +106,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(["settings"]),
+    ...mapState(["cloudinary"]),
     uploadDisabled() {
-      return !this.isPhoto || this.settings.cloudname.length === 0 || this.settings.preset.length === 0
+      return !this.isPhoto || this.cloudinary.cloudname.length === 0 || this.cloudinary.preset.length === 0
     },
     videoClasses() {
       return {
@@ -119,11 +119,11 @@ export default {
   },
   methods: {
     upload: function () {
-      if (this.settings.cloudname.length === 0 || this.settings.preset.length === 0) {
+      if (this.cloudinary.cloudname.length === 0 || this.cloudinary.preset.length === 0) {
         console.log(`Upload to Cloudinary unsuccessful: use settings to provide cloudname and preset`)
         return
       }
-      uploadToCloudinary(this.settings.cloudname, this.settings.preset, this.fileData)
+      uploadToCloudinary(this.cloudinary.cloudname, this.cloudinary.preset, this.fileData)
           .then(result => {
             console.log(`Upload to Cloudinary successful`)
             this.cameraState = true

@@ -6,13 +6,11 @@ import store from './store'
 import VueMixpanel from '@/plugin/mixpanel/index.js'
 import VueCrisp from '@/plugin/crisp/index.js'
 
-window
-
 const app = createApp(App)
 app.use(store)
 app.use(router)
 app.use(VueMixpanel, {
-    token: '4a8ed81bcb8a334186d34cf7fd1e5c89',
+    token: 'b0022491a5bf716993bdbbeac23717b7',
     config: {
         debug: true
     }

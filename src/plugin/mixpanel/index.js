@@ -4,14 +4,13 @@ export default {
     install(app, {config, token}) {
         const store = app.config.globalProperties.$store
         store.commit('initStore')
-        const userID = store.getters['getUserID']
 
         if (typeof config !== 'object') config = {}
         const defaultConfig = {
-            loaded() {
-                store.commit('setMixpanelReady')
-                mixpanel.identify(userID)
+            loaded: () => {
                 app.config.globalProperties.$mixpanel = mixpanel
+                app.provide('mixpanel', mixpanel)
+                store.commit('setMixpanelReady')
             }
         }
         const endConfig = Object.assign(config, defaultConfig)

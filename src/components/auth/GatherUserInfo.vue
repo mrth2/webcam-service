@@ -8,7 +8,8 @@
           </div>
           <div class="modal-body">
             <p>Let's sign up to start using our application in 30 seconds</p>
-            <form class="row g-3 needs-validation" :class="{'was-validated': hasError}" @submit.prevent="submitUserInfo" novalidate>
+            <form class="row g-3 needs-validation" :class="{'was-validated': hasError}" @submit.prevent="submitUserInfo"
+                  novalidate>
               <template v-if="!isLoading">
                 <div class="mb-3">
                   <label for="u-name" class="form-label">Your Name</label>
@@ -34,7 +35,7 @@
                 </div>
               </template>
               <div class="loading" v-else>
-                <img src="../assets/loading.svg"/>
+                <img src="./../../assets/loading.svg"/>
               </div>
             </form>
           </div>
@@ -109,6 +110,7 @@ export default {
         "Sign up date": new Date().toISOString(),
         "Location": this.locationInput
       }, () => {
+        this.$mixpanel.identify(this.userID)
         this.$mixpanel.alias(this.emailInput)
         if (typeof callback === 'function') callback()
       })
@@ -133,19 +135,14 @@ export default {
     if (this.location) this.locationInput = this.location
     // mixpanel
     this.$mixpanel.opt_in_tracking()
-    // crisp
-    //const crispStoredUserEmail = this.$crisp.get("user:email")
-    const mixpanelStoredUserEmail = this.$mixpanel.get_property('$email')
+    const distinctId = this.$mixpanel.get_distinct_id()
     // process props
     if (this.$props.email && this.$props.name && this.$props.location) {
-      // sync info to crisp
-      if (mixpanelStoredUserEmail === null) {
-        this.syncCrisp()
-      }
+      this.syncCrisp()
       this.syncMixpanel()
     }
     // no stored email => show modal to gather
-    else if (!mixpanelStoredUserEmail) {
+    else if (distinctId !== this.userID) {
       this.showModal()
     }
   }

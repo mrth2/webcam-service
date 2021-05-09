@@ -14,6 +14,22 @@
 <script>
 export default {
   name: 'LeGrandFourire Live',
+  data() {
+    const ziggeoApp = new window.ZiggeoApi.V2.Application({
+      token: this.$store.getters['getZiggeoApiKey'],
+      webrtc_streaming_if_necessary: true,
+      webrtc_on_mobile: true,
+      auth: true
+    })
+    return {
+      ziggeoApp
+    }
+  },
+  provide() {
+    return {
+      ziggeoApp: this.ziggeoApp
+    }
+  },
   computed: {
     isAppReady() {
       return this.$store.getters['isAppReady']
@@ -44,8 +60,13 @@ export default {
       }])
     }
   },
-  created() {
-    this.checkAppReady()
+  mounted() {
+    this.ziggeoApp.on('ready', () => {
+      this.checkAppReady()
+    })
+    this.ziggeoApp.embed_events.on('seek', (embedding, position) => {
+      console.log(embedding, position)
+    })
   }
 }
 </script>

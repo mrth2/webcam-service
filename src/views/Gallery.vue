@@ -1,61 +1,94 @@
 <template>
   <div id="gallery">
-    <h2>Gallery</h2>
-    <section id="images"></section>
+    <div class="container" v-if="!isLoading">
+      <div class="row" v-for="(_videos, index) in videos" :key="index">
+        <div :class="columnClass" v-for="video in _videos" :key="video.token" :ref="video.token"></div>
+      </div>
+    </div>
+    <div class="loading" v-else>
+      <img src="./../assets/loading.svg"/>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
-  name: "gallery",
+import Ziggeo from 'ziggeo'
 
-  mounted() {
-    //get cloudname and preset from local storage
-    if (localStorage.getItem('cloudname')) {
-      this.cloudname = localStorage.getItem('cloudname')
-    }
-    if (localStorage.getItem('preset')) {
-      this.preset = localStorage.getItem('preset')
-    }
-    //if these aren't set don't allow browse
-    /*global cloudinary*/
-    /*eslint no-undef: "error"*/
-    this.myGallery = cloudinary.galleryWidget({
-      container: "#images",
-      cloudName: this.cloudname,
-      mediaAssets: [
-        {
-          tag: "browser_upload",
-          upload_preset: this.preset
-        }
-      ]
-    })
-    this.myGallery.render()
-  },
-  beforeUnmount: function () {
-    this.myGallery.destroy
-  },
+export default {
   data() {
     return {
-      myGallery: null
+      isLoading: true,
+      videos: []
     }
   },
+  inject: ['ziggeoApp'],
   computed: {
-    cloudname: {
-      get() {
-        return this.$store.state.settings.cloudname
-      },
-      set(value) {
-        this.$store.commit("updateCloudname", value)
+    column() {
+      const w = window.innerWidth
+      if (w > 1000) {
+        return 3
+      }
+      else if (w > 468) {
+        return 2
+      }
+      else {
+        return 1
+      }
+    },
+    columnClass() {
+      return `col-${12/this.column}`
+    }
+  },
+  methods: {
+    async parseVideoList(videos) {
+      videos.forEach((video, index) => {
+        if (index % this.column === 0) {
+          this.videos.push([video])
+        } else {
+          this.videos[this.videos.length - 1].push(video)
+        }
+      })
+    },
+    renderVideos() {
+      this.videos.forEach((_videos) => {
+        _videos.forEach(video => this.renderVideo(video.token))
+      })
+    },
+    renderVideo(videoToken) {
+      if (this.$refs[videoToken]) {
+        const player = new window.ZiggeoApi.V2.Player({
+          element: this.$refs[videoToken],
+          attrs: {
+            video: videoToken,
+            width: '100%',
+            height: 'auto',
+            theme: 'elevate',
+            themecolor: 'green'
+          }
+        })
+        player.activate()
+      } else {
+        setTimeout(() => this.renderVideo(videoToken), 50)
       }
     }
+  },
+  mounted() {
+    const _this = this
+    const {token, privateKey, encryptionKey} = this.$store.getters['getZiggeoApplicationKeys']
+    const ZiggeoSdk = new Ziggeo(token, privateKey, encryptionKey)
+    ZiggeoSdk.Videos.index({
+      limit: 100,
+      tags: this.$store.getters['getUserID']
+    }, {
+      async success(index) {
+        await _this.parseVideoList(index)
+        _this.isLoading = false
+        _this.renderVideos()
+      },
+      failure(args, error) {
+        console.log(error)
+      }
+    })
   }
 }
 </script>
-
-<style scoped>
-#images {
-  width: 80%;
-  height: 20%;
-}
-</style>

@@ -6,10 +6,13 @@ export default createStore({
         crispReady: false,
         mixpanelReady: false,
         userID: null,
-        settings: {
+        cloudinary: {
             cloudname: 'live-legrandfourire',
             preset: 'my-unsigned-preset'
-        }
+        },
+        ziggeoApiKey: '14372b7e9d5b5ba36818404d7f49ddd5',
+        ziggeoPrivateKey: '760b5203249c1ade3fe57a2eb44be50a',
+        ziggeoEncryptionKey: 'f8fc712304f00a89608a4e81d12c6428'
     },
     getters: {
         getUserID(state) {
@@ -17,6 +20,16 @@ export default createStore({
         },
         isAppReady(state) {
             return state.crispReady && state.mixpanelReady
+        },
+        getZiggeoApiKey(state) {
+            return state.ziggeoApiKey
+        },
+        getZiggeoApplicationKeys(state) {
+            return {
+                token: state.ziggeoApiKey,
+                privateKey: state.ziggeoPrivateKey,
+                encryptionKey: state.ziggeoEncryptionKey
+            }
         }
     },
     mutations: {
