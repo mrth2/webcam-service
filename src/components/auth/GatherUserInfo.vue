@@ -4,10 +4,10 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Welcome to LegrandFourire Live Service!!!</h5>
+            <h5 class="modal-title">{{ title }}</h5>
           </div>
           <div class="modal-body">
-            <p>Let's sign up to start using our application in 30 seconds</p>
+            <p>{{ message }}</p>
             <form class="row g-3 needs-validation" :class="{'was-validated': hasError}" @submit.prevent="submitUserInfo"
                   novalidate>
               <template v-if="!isLoading">
@@ -49,10 +49,17 @@
 import helpers from '@/helpers/helpers.js'
 import Modal from 'bootstrap/js/dist/modal'
 
+const MODAL_TITLE = 'Welcome to LegrandFourire Live Service!!!'
+const MODAL_MESSAGE = 'Let\'s sign up to start using our application in 30 seconds'
+const MODAL_RESTORE_TITLE = 'Welcome back to LegrandFourire Live Service'
+const MODAL_RESTORE_MESSAGE = 'Please confirm your information then start using our application'
+
 export default {
   props: ['name', 'email', 'location'],
   data() {
     return {
+      title: MODAL_TITLE,
+      message: MODAL_MESSAGE,
       isLoading: false,
       nameInput: '',
       emailInput: '',
@@ -110,7 +117,6 @@ export default {
         "Sign up date": new Date().toISOString(),
         "Location": this.locationInput
       }, () => {
-        this.$mixpanel.identify(this.userID)
         this.$mixpanel.alias(this.emailInput)
         if (typeof callback === 'function') callback()
       })
@@ -135,14 +141,23 @@ export default {
     if (this.location) this.locationInput = this.location
     // mixpanel
     this.$mixpanel.opt_in_tracking()
-    const distinctId = this.$mixpanel.get_distinct_id()
+    const crispStoredEmail = this.$crisp.get('user:email')
+    console.log(crispStoredEmail)
     // process props
     if (this.$props.email && this.$props.name && this.$props.location) {
-      this.syncCrisp()
-      this.syncMixpanel()
+      // passed email from props is different from crisp session email
+      if (crispStoredEmail && this.$props.email !== crispStoredEmail) {
+        this.title = MODAL_RESTORE_TITLE
+        this.message = MODAL_RESTORE_MESSAGE
+        this.showModal()
+      }
+      else {
+        this.syncCrisp()
+        this.syncMixpanel()
+      }
     }
     // no stored email => show modal to gather
-    else if (distinctId !== this.userID) {
+    else if (!crispStoredEmail) {
       this.showModal()
     }
   }

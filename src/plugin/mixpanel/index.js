@@ -8,6 +8,7 @@ export default {
         if (typeof config !== 'object') config = {}
         const defaultConfig = {
             loaded: () => {
+                mixpanel.identify(store.getters['getUserID'])
                 app.config.globalProperties.$mixpanel = mixpanel
                 app.provide('mixpanel', mixpanel)
                 store.commit('setMixpanelReady')

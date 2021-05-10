@@ -13,8 +13,8 @@ export default {
             session_merge: true
         };
         window.CRISP_READY_TRIGGER = function () {
-            store.commit('setCrispReady')
             app.config.globalProperties.$crisp = window.$crisp
+            store.commit('setCrispReady')
         };
         window.CRISP_TOKEN_ID = store.getters['getUserID'];
 
