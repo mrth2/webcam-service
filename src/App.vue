@@ -4,7 +4,7 @@
   <div class="loading" v-if="!isAppReady">
     <inline-svg src="/img/loading.svg"/>
   </div>
-  <router-view v-else/>
+  <router-view ref="routerView" v-else/>
 
   <the-footer/>
 
@@ -122,5 +122,9 @@ body {
   svg {
     background-color: #EDF1F3 !important;
   }
+}
+
+.modal-dialog {
+  margin-top: 80px;
 }
 </style>

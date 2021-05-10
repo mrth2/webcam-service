@@ -148,9 +148,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.modal-dialog {
-  margin-top: 80px;
-}
-</style>

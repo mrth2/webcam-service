@@ -9,6 +9,11 @@
           <ziggeo-mirror></ziggeo-mirror>
         </div>
       </div>
+      <div class="row mt-xxl-5">
+        <p class="text-center">
+          View your recorded videos <router-link to="/gallery">here</router-link>
+        </p>
+      </div>
     </div>
   </div>
   <gather-user-info :name="name" :email="email" :location="location"></gather-user-info>
