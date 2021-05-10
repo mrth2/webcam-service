@@ -1,19 +1,26 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link>
-    |
-    <router-link to="/gallery">Gallery</router-link>
-  </div>
+  <the-header/>
 
   <div class="loading" v-if="!isAppReady">
-    <img src="./assets/loading.svg"/>
+    <inline-svg src="/img/loading.svg"/>
   </div>
   <router-view v-else/>
+
+  <the-footer/>
+
+  <svg-icon/>
 </template>
 
 <script>
+import TheHeader from '@/components/global/Header.vue'
+import TheFooter from '@/components/global/Footer.vue'
+import SvgIcon from '@/components/global/SvgIcon.vue'
+
 export default {
   name: 'LeGrandFourire Live',
+  components: {
+    TheHeader, TheFooter, SvgIcon
+  },
   data() {
     const ziggeoApp = new window.ZiggeoApi.V2.Application({
       token: this.$store.getters['getZiggeoApiKey'],
@@ -64,8 +71,20 @@ export default {
     this.ziggeoApp.on('ready', () => {
       this.checkAppReady()
     })
-    this.ziggeoApp.embed_events.on('seek', (embedding, position) => {
-      console.log(embedding, position)
+    this.ziggeoApp.embed_events.on("ready_to_record", () => {
+      this.$mixpanel.track('Ziggeo Recorder Ready')
+    })
+    this.ziggeoApp.embed_events.on("recording", () => {
+      this.$mixpanel.track('User start recording')
+    })
+    this.ziggeoApp.embed_events.on("recording_stopped", () => {
+      this.$mixpanel.track('User stop recording')
+    })
+    this.ziggeoApp.embed_events.on("rerecord", () => {
+      this.$mixpanel.track('User discard recorded video & restart record')
+    })
+    this.ziggeoApp.embed_events.on("uploaded", () => {
+      this.$mixpanel.track('User uploaded recorded video')
     })
   }
 }
@@ -74,24 +93,34 @@ export default {
 <style lang="scss">
 @import "~bootstrap/scss/bootstrap";
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+body {
+  background-color: #EDF1F3;
+  font-family: "Poppins", serif;
+  -webkit-text-size-adjust: 100%;
+  --swiper-theme-color: #007aff;
+  --swiper-navigation-size: 44px;
+  box-sizing: inherit;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 16px;
+  font-weight: 400;
+  color: #404040;
+  overflow-x: hidden;
+  padding-top: 120px;
+
+  footer {
+    margin-top: 120px;
+  }
 }
 
-#nav {
-  padding: 30px;
+.loading {
+  display: block;
+  width: 100%;
+  text-align: center;
+  align-content: center;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  svg {
+    background-color: #EDF1F3 !important;
   }
 }
 </style>

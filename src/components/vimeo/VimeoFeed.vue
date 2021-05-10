@@ -1,5 +1,5 @@
 <template>
-  <div ref="video" class="vimeo-feed"></div>
+  <div ref="video" id="vimeo-feed" class="vimeo-feed box-shadow"></div>
 </template>
 
 <script>
@@ -16,6 +16,22 @@ export default {
       id: this.videoId,
       autoplay: true,
       responsive: true
+    })
+    player.on('loaded', () => {
+      const playerHead = document.getElementById('vimeo-feed').querySelector('iframe').contentWindow.document.head
+      console.log(playerHead)
+      let link = document.createElement('link')
+      link.href = 'https://fonts.googleapis.com/css?family=Poppins:800,regular,|Nunito+Sans:200,700,regular,|whomp:100,200,300,400,500,600,700,800,900|Nunito+Sans:100,200,300,400,500,600,700,800,900|Array:100,200,300,400,500,600,700,800,900|Poppins:100,200,300,400,500,600,700,800,900'
+      link.rel = 'stylesheet'
+      link.type = 'text/css'
+      player.element.ownerDocument.head.appendChild(link)
+
+      let style = document.createElement("style")
+      style.textContent = `
+      .player {
+        font-family: "Poppins", serif !important;
+      `
+      player.element.ownerDocument.head.appendChild(style)
     })
     player.on('play', (data) => {
       this.$mixpanel.track('Play video', data)
@@ -42,6 +58,6 @@ export default {
 <style scoped lang="scss">
 iframe.vimeo-feed {
   width: 100%;
-  height: 400px;
+  height: 360px;
 }
 </style>

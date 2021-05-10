@@ -12,7 +12,8 @@ export default createStore({
         },
         ziggeoApiKey: '14372b7e9d5b5ba36818404d7f49ddd5',
         ziggeoPrivateKey: '760b5203249c1ade3fe57a2eb44be50a',
-        ziggeoEncryptionKey: 'f8fc712304f00a89608a4e81d12c6428'
+        ziggeoEncryptionKey: 'f8fc712304f00a89608a4e81d12c6428',
+        mainSiteBase: 'https://legrandfourire.com'
     },
     getters: {
         getUserID(state) {
@@ -30,6 +31,9 @@ export default createStore({
                 privateKey: state.ziggeoPrivateKey,
                 encryptionKey: state.ziggeoEncryptionKey
             }
+        },
+        getMainSiteBase(state) {
+            return state.mainSiteBase
         }
     },
     mutations: {

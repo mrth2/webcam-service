@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="loading" v-else>
-      <img src="./../assets/loading.svg"/>
+      <inline-svg src="/img/loading.svg"/>
     </div>
   </div>
 </template>

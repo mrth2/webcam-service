@@ -1,25 +1,7 @@
 <template>
-  <div ref="recorder"></div>
-  <!--  <ziggeo-recorder
-        theme="elevate"
-        theme-color="green"
-        :apiKey="apiKey"
-        width="100%"
-        height="auto"
-        :flipscreen=true
-        :gallerysnapshots=10
-        :allowscreen="true"
-        :tags="tags"
-        @recorderReady="recorderReady"
-        @camera_unresponsive="recorderCameraUnresponsive"
-        @access_forbidden="recorderAccessForbidden"
-        @upload_selected="recorderUploadSelected"
-    ></ziggeo-recorder>-->
+  <div ref="recorder" class="box-shadow"></div>
 </template>
 <script>
-//import {useStore} from 'vuex';
-//import {ref} from 'vue'
-
 export default {
   name: 'ZiggeoMirror',
   data() {
@@ -33,7 +15,7 @@ export default {
       element: this.$refs.recorder,
       attrs: {
         width: '100%',
-        height: 'auto',
+        height: 350,
         theme: 'elevate',
         themecolor: 'green',
         flipscreen: true,
@@ -44,40 +26,20 @@ export default {
     })
     this.recorder.activate()
   }
-  /*setup() {
-    // eslint-disable-next-line no-unused-vars
-    let recorderInstance;
-    const store = useStore()
-    const apiKey = store.getters['getZiggeoApiKey'];
-
-    const tags = ref([store.getters['getUserID']])
-
-    const recorderReady = (instance) => {
-      recorderInstance = instance;
-    };
-
-    // eslint-disable-next-line no-unused-vars
-    const recorderCameraUnresponsive = (embedding) => {
-      console.log('camera unresponsive');
-    };
-
-    // eslint-disable-next-line no-unused-vars
-    const recorderAccessForbidden = (embedding) => {
-      console.log('access forbidden');
-    };
-
-    const recorderUploadSelected = (embedding, file) => {
-      console.log('upload selected', file);
-    };
-
-    return {
-      apiKey,
-      tags,
-      recorderReady,
-      recorderAccessForbidden,
-      recorderCameraUnresponsive,
-      recorderUploadSelected
-    };
-  }*/
 }
 </script>
+
+<style scoped>
+.box-shadow {
+  background-color: #073653 !important;
+}
+</style>
+
+<style>
+div[class^="ba-videorecorder-chooser-button-"] span, .ba-videorecorder-message-message {
+  font-family: "Poppins", serif !important;
+}
+.ba-videorecorder-chooser-container {
+  background-color: #073653 !important;
+}
+</style>

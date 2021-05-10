@@ -2,11 +2,10 @@
   <div class="home">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 col-md-12 mb-4 mb-md-0 align-self-end">
+        <div class="col-lg-6 col-md-12 mb-1 mb-md-0 align-self-center">
           <vimeo-feed></vimeo-feed>
         </div>
-        <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-<!--          <Camera></Camera>-->
+        <div class="col-lg-6 col-md-12 mb-1 mb-md-0 align-self-center">
           <ziggeo-mirror></ziggeo-mirror>
         </div>
       </div>
@@ -20,7 +19,6 @@
 import VimeoFeed from '@/components/vimeo/VimeoFeed.vue'
 import GatherUserInfo from '@/components/auth/GatherUserInfo.vue'
 import helpers from '@/helpers/helpers.js'
-//import Camera from '@/components/cloudinary/Camera.vue'
 import ZiggeoMirror from '@/components/ziggeo/ZiggeoMirror.vue'
 
 export default {
@@ -53,3 +51,11 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.home {
+  .col-lg-6 {
+    height: 360px;
+  }
+}
+</style>

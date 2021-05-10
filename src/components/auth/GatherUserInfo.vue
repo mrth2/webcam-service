@@ -35,7 +35,7 @@
                 </div>
               </template>
               <div class="loading" v-else>
-                <img src="./../../assets/loading.svg"/>
+                <inline-svg src="/img/loading.svg"/>
               </div>
             </form>
           </div>
@@ -150,7 +150,7 @@ export default {
 </script>
 
 <style scoped>
-.loading {
-  text-align: center;
+.modal-dialog {
+  margin-top: 80px;
 }
 </style>
