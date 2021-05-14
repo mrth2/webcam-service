@@ -10,7 +10,7 @@
               </div>
               <div class="card-body">
                 <p class="card-text">Recorded on
-                  {{ new Date(video.submission_date).toLocaleString('fr-FR', {hour12: false}) }}</p>
+                  {{ new Date(video.submission_date * 1000).toLocaleString('fr-FR', {hour12: false}) }}</p>
                 <p class="card-text">Duration: {{ video.duration.toFixed(2) }}s</p>
                 <div class="btn-group text-end" role="group" aria-label="Video Actions">
                   <btn type="link" extraClass="card-link, p-0" @click="downloadVideo(video.token)">Download</btn>

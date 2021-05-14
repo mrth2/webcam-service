@@ -18,10 +18,19 @@ export default {
         height: 350,
         theme: 'elevate',
         themecolor: 'green',
+        'flip-camera': true,
         flipscreen: true,
         gallerysnapshots: 10,
         allowscreen: true,
-        tags: [this.$store.getters['getUserID']]
+        tags: [this.$store.getters['getUserID']],
+        skipinitial: true,
+        stretch: true,
+        snapshotfromuploader: true,
+        snapshotfrommobilecapture: true,
+        allowpip: true,
+        airplay: true,
+        camerafacefront: true,
+        allowmultistreams: true
       }
     })
     this.recorder.activate()
