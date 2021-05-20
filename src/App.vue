@@ -22,6 +22,7 @@ export default {
     TheHeader, TheFooter, SvgIcon
   },
   data() {
+    window.ZiggeoApi.V2.Locale.setLocale('fr');
     const ziggeoApp = new window.ZiggeoApi.V2.Application({
       token: this.$store.getters['getZiggeoApiKey'],
       webrtc_streaming_if_necessary: true,
@@ -71,6 +72,12 @@ export default {
     this.ziggeoApp.on('ready', () => {
       this.checkAppReady()
     })
+    this.ziggeoApp.embed_events.on("access_forbidden", () => {
+      this.$store.commit('setZiggeoGranted', false)
+    })
+    this.ziggeoApp.embed_events.on("access_granted", () => {
+      this.$store.commit('setZiggeoGranted', true)
+    })
     this.ziggeoApp.embed_events.on("ready_to_record", () => {
       this.$mixpanel.track('Ziggeo Recorder Ready')
     })
@@ -106,7 +113,7 @@ body {
   font-weight: 400;
   color: #404040;
   overflow-x: hidden;
-  padding-top: 120px;
+  //padding-top: 120px;
 
   footer {
     margin-top: 120px;
@@ -126,5 +133,15 @@ body {
 
 .modal-dialog {
   margin-top: 80px;
+}
+
+.btn-primary {
+  background-color: #EE4A0B;
+  border-color: #EE4A0B;
+
+  &:hover {
+    background-color: #c23905;
+    border-color: #c23905;
+  }
 }
 </style>

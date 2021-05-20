@@ -41,11 +41,12 @@
             </div>
           </nav>
           <div id="text_block-35-6" class="ct-text-block text-footer">Service aux donateurs : <a
-              href="tel:+18773364443">1 877 336-4443</a> | <a href="https://fqc.qc.ca/fr">cancerquebec.com</a><br>Fondation
+              href="tel:+18773364443">1 877 336-4443</a> | <a href="https://fqc.qc.ca/fr" target="_blank">cancerquebec.com</a><br>Fondation
             québécoise du cancer 2075, rue de Champlain, Montréal (Québec) H2L 2T1
           </div>
           <div id="text_block-37-6" class="ct-text-block text-footer">© Fondation québécoise du cancer, 2021. Une
-            conception d’Atypic. Tous&nbsp;droits&nbsp;réservés. <a href="/politique-de-confidentialite">Politique de
+            conception d’Atypic. Tous&nbsp;droits&nbsp;réservés. <a
+                href="https://legrandfourire.com/politique-de-confidentialite/" target="_blank">Politique de
               confidentialité</a>.
           </div>
         </div>

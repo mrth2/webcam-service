@@ -30,7 +30,8 @@ export default {
         allowpip: true,
         airplay: true,
         camerafacefront: true,
-        allowmultistreams: true
+        allowmultistreams: true,
+        timelimit: 10
       }
     })
     this.recorder.activate()

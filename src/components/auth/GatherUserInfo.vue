@@ -11,27 +11,38 @@
             <form class="row g-3 needs-validation" :class="{'was-validated': hasError}" @submit.prevent="submitUserInfo"
                   novalidate>
               <template v-if="!isLoading">
-                <div class="mb-3">
-                  <label for="u-name" class="form-label">Your Name</label>
-                  <input type="text" class="form-control" id="u-name" placeholder="Enter your name please..."
-                         v-model.trim="nameInput" required>
-                  <div class="invalid-feedback" v-if="error.name" v-html="error.name"></div>
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label for="u-firstname" class="form-label">Prénom</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="u-firstname" placeholder="Entrez votre prénom"
+                             v-model.trim="nameInput.first" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="u-lastname" class="form-label">Nom</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="u-lastname" placeholder="Entrez votre nom de famille"
+                             v-model.trim="nameInput.last" required>
+                    </div>
+                  </div>
+                  <div class="text-danger" v-if="error.name" v-html="error.name"></div>
                 </div>
                 <div class="mb-3">
-                  <label for="u-email" class="form-label">Your Email</label>
-                  <input type="email" class="form-control" id="u-email" placeholder="Enter your email please..."
+                  <label for="u-email" class="form-label">Courriel</label>
+                  <input type="email" class="form-control" id="u-email" placeholder="Entrer votre Email"
                          aria-describedby="emailHelp" v-model="emailInput" required>
-                  <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                  <div class="invalid-feedback" v-if="error.email" v-html="error.email"></div>
+<!--                  <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
+                  <div class="text-danger" v-if="error.email" v-html="error.email"></div>
                 </div>
                 <div class="mb-3">
-                  <label for="u-location" class="form-label">Your Address</label>
-                  <input type="text" class="form-control" id="u-location" placeholder="Enter your location please..."
+                  <label for="u-location" class="form-label">Ville</label>
+                  <input type="text" class="form-control" id="u-location" placeholder="Entrez votre ville (facultatif)"
                          v-model.trim="locationInput">
-                  <div class="invalid-feedback" v-if="error.location" v-html="error.location"></div>
+                  <div class="text-danger" v-if="error.location" v-html="error.location"></div>
                 </div>
                 <div class="mb-3">
-                  <button type="submit" class="btn btn-primary mb-3">Sign Up Now</button>
+                  <button type="submit" class="btn btn-primary mb-3">Soumettre</button>
                 </div>
               </template>
               <div class="loading" v-else>
@@ -49,10 +60,10 @@
 import helpers from '@/helpers/helpers.js'
 import Modal from 'bootstrap/js/dist/modal'
 
-const MODAL_TITLE = 'Welcome to LegrandFourire Live Service!!!'
-const MODAL_MESSAGE = 'Let\'s sign up to start using our application in 30 seconds'
-const MODAL_RESTORE_TITLE = 'Welcome back to LegrandFourire Live Service'
-const MODAL_RESTORE_MESSAGE = 'Please confirm your information then start using our application'
+const MODAL_TITLE = 'Merci d’entrer vos informations pour accéder à la diffusion en direct.'
+const MODAL_MESSAGE = ''
+const MODAL_RESTORE_TITLE = MODAL_TITLE
+const MODAL_RESTORE_MESSAGE = ''
 
 export default {
   props: ['name', 'email', 'location'],
@@ -61,7 +72,10 @@ export default {
       title: MODAL_TITLE,
       message: MODAL_MESSAGE,
       isLoading: false,
-      nameInput: '',
+      nameInput: {
+        first: '',
+        last: ''
+      },
       emailInput: '',
       locationInput: '',
       error: {
@@ -73,6 +87,16 @@ export default {
     }
   },
   computed: {
+    fullName() {
+      if (this.nameInput.first !== '' && this.nameInput.last !== '') {
+        return `${this.nameInput.first} ${this.nameInput.last}`
+      } else if (this.nameInput.first !== '') {
+        return this.nameInput.first
+      } else if (this.nameInput.last !== '') {
+        return this.nameInput.last
+      }
+      return ''
+    },
     userID() {
       return this.$store.getters['getUserID']
     },
@@ -90,15 +114,15 @@ export default {
     },
     submitUserInfo() {
       this.clearError()
-      if (this.nameInput === '') {
-        this.error.name = 'Please enter your name'
+      if (this.fullName === '') {
+        this.error.name = 'S\'il vous plaît entrez votre nom.'
       }
       if (!helpers.validateEmail(this.emailInput)) {
-        this.error.email = 'Please enter a valid email'
+        this.error.email = 'Veuillez soumettre un courriel valide.'
       }
-      if (this.locationInput === '') {
-        this.error.location = 'Please enter your address'
-      }
+      /*if (this.locationInput === '') {
+        this.error.location = 'Veuillez entrer votre adresse'
+      }*/
       if (this.hasError) return false
       this.isLoading = true
 
@@ -111,7 +135,9 @@ export default {
     syncMixpanel(callback) {
       // sync to mixpanel
       this.$mixpanel.people.set_once({
-        "Full name": this.nameInput,
+        "First name": this.nameInput.first,
+        "Last name": this.nameInput.last,
+        "Full name": this.fullName,
         "$email": this.emailInput,
         "USER_ID": this.userID,
         "Sign up date": new Date().toISOString(),
@@ -123,7 +149,7 @@ export default {
     },
     syncCrisp() {
       // sync to crisp
-      this.$crisp.push(["set", "user:nickname", [this.nameInput]])
+      this.$crisp.push(["set", "user:nickname", [this.fullName]])
       this.$crisp.push(["set", "user:email", [this.emailInput]])
       this.$crisp.push(["set", "session:data", [[["userID", this.userID]]]])
     },
@@ -136,7 +162,7 @@ export default {
     }
   },
   mounted() {
-    if (this.name) this.nameInput = this.name
+    if (this.name) this.nameInput.first = this.name
     if (this.email) this.emailInput = this.email
     if (this.location) this.locationInput = this.location
     // mixpanel
@@ -150,8 +176,7 @@ export default {
         this.title = MODAL_RESTORE_TITLE
         this.message = MODAL_RESTORE_MESSAGE
         this.showModal()
-      }
-      else {
+      } else {
         this.syncCrisp()
         this.syncMixpanel()
       }

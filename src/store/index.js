@@ -10,6 +10,7 @@ export default createStore({
             cloudname: 'live-legrandfourire',
             preset: 'my-unsigned-preset'
         },
+        ziggeoGranted: true,
         ziggeoApiKey: '14372b7e9d5b5ba36818404d7f49ddd5',
         ziggeoPrivateKey: '760b5203249c1ade3fe57a2eb44be50a',
         ziggeoEncryptionKey: 'f8fc712304f00a89608a4e81d12c6428',
@@ -21,6 +22,9 @@ export default createStore({
         },
         isAppReady(state) {
             return state.crispReady && state.mixpanelReady
+        },
+        isZiggeoPermissionGranted(state) {
+            return state.ziggeoGranted
         },
         getZiggeoApiKey(state) {
             return state.ziggeoApiKey
@@ -57,6 +61,9 @@ export default createStore({
         },
         updatePreset(state, preset) {
             state.settings.preset = preset
+        },
+        setZiggeoGranted(state, grant) {
+            state.ziggeoGranted = grant
         }
     }
 })
