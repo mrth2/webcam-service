@@ -30,7 +30,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="u-email" class="form-label">Courriel</label>
-                  <input type="email" class="form-control" id="u-email" placeholder="Entrer votre Email"
+                  <input type="email" class="form-control" id="u-email" placeholder="Entrez votre courriel"
                          aria-describedby="emailHelp" v-model="emailInput" required>
 <!--                  <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
                   <div class="text-danger" v-if="error.email" v-html="error.email"></div>
