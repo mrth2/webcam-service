@@ -24,6 +24,7 @@ export default {
         allowscreen: true,
         tags: [this.$store.getters['getUserID']],
         skipinitial: true,
+        skipinitialonrerecord: true,
         stretch: true,
         picksnapshots: false,
         snapshotfromuploader: true,
@@ -32,7 +33,9 @@ export default {
         airplay: true,
         camerafacefront: true,
         allowmultistreams: true,
-        timelimit: 10
+        timelimit: 10,
+        createthumbnails: true,
+        forcerefresh: true
       }
     })
     this.recorder.activate()
