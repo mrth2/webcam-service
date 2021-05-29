@@ -32,7 +32,6 @@
                   <label for="u-email" class="form-label">Courriel</label>
                   <input type="email" class="form-control" id="u-email" placeholder="Entrez votre courriel"
                          aria-describedby="emailHelp" v-model="emailInput" required>
-<!--                  <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>-->
                   <div class="text-danger" v-if="error.email" v-html="error.email"></div>
                 </div>
                 <div class="mb-3">
@@ -40,6 +39,13 @@
                   <input type="text" class="form-control" id="u-location" placeholder="Entrez votre ville (facultatif)"
                          v-model.trim="locationInput">
                   <div class="text-danger" v-if="error.location" v-html="error.location"></div>
+                </div>
+                <div class="mb-3">
+                  <input class="form-check-input" type="checkbox" v-model="termAgreed" id="term-agreement" required>
+                  <label class="form-check-label" style="margin-left: 10px;" for="term-agreement">
+                    J'accepte les conditions d'utilisation du site.
+                  </label>
+                  <div class="text-danger" v-if="error.term" v-html="error.term"></div>
                 </div>
                 <div class="mb-3">
                   <button type="submit" class="btn btn-primary mb-3">Soumettre</button>
@@ -78,10 +84,12 @@ export default {
       },
       emailInput: '',
       locationInput: '',
+      termAgreed: false,
       error: {
         name: null,
         email: null,
-        location: null
+        location: null,
+        term: null
       },
       modal: null
     }
@@ -101,7 +109,25 @@ export default {
       return this.$store.getters['getUserID']
     },
     hasError() {
-      return this.error.email !== null || this.error.name !== null || this.error.location !== null
+      let errorOccurred = false
+      for (const i in this.error) {
+        // eslint-disable-next-line no-prototype-builtins
+        if (this.error.hasOwnProperty(i)) {
+          if (this.error[i] !== null) errorOccurred = true
+        }
+      }
+      return errorOccurred
+    }
+  },
+  watch: {
+    emailInput() {
+      this.error.email = null
+    },
+    fullName() {
+      this.error.name = null
+    },
+    termAgreed() {
+      this.error.term = null
     }
   },
   methods: {
@@ -109,7 +135,8 @@ export default {
       this.error = {
         name: null,
         email: null,
-        location: null
+        location: null,
+        term: null
       }
     },
     submitUserInfo() {
@@ -123,6 +150,9 @@ export default {
       /*if (this.locationInput === '') {
         this.error.location = 'Veuillez entrer votre adresse'
       }*/
+      if (!this.termAgreed) {
+        this.error.term = 'Veuillez accepter notre terme.'
+      }
       if (this.hasError) return false
       this.isLoading = true
 

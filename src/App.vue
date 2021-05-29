@@ -101,7 +101,7 @@ export default {
 @import "~bootstrap/scss/bootstrap";
 
 body {
-  background-color: #EDF1F3;
+  background-color: #C4E9FB;
   font-family: "Poppins", serif;
   -webkit-text-size-adjust: 100%;
   --swiper-theme-color: #007aff;
@@ -127,7 +127,7 @@ body {
   align-content: center;
 
   svg {
-    background-color: #EDF1F3 !important;
+    background-color: #C4E9FB !important;
   }
 }
 

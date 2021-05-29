@@ -2,12 +2,19 @@
   <div class="home">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 col-md-12 mb-1 mb-md-0 align-self-center">
+        <div class="col-lg-8 col-md-12 mb-1 mb-md-0 align-self-start">
           <vimeo-feed></vimeo-feed>
         </div>
-        <div class="col-lg-6 col-md-12 mb-1 mb-md-0 align-self-center">
-          <ziggeo-mirror v-if="ziggeoGranted"></ziggeo-mirror>
-          <img v-else class="col-lg-12" src="https://legrandfourire.wpengine.com/wp-content/uploads/2021/04/Banner-Hero-1.jpg" alt="">
+        <div class="col-lg-4 col-md-12 mb-1 align-self-start">
+          <div class="d-flex align-items-end flex-column my-lg-0 my-5">
+            <ziggeo-mirror v-if="ziggeoGranted"></ziggeo-mirror>
+            <div v-else>
+              <img class="img-fluid" src="./../assets/CameraPermissionRequired.png" alt="">
+            </div>
+            <div class="row mirror-info text-center px-5 m-auto mt-5 align-baseline">
+              This is the information about the live event, which will be added later!
+            </div>
+          </div>
         </div>
       </div>
       <div class="row mt-xxl-5 text-center">

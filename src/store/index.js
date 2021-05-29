@@ -7,8 +7,8 @@ export default createStore({
         mixpanelReady: false,
         userID: null,
         cloudinary: {
-            cloudname: 'live-legrandfourire',
-            preset: 'my-unsigned-preset'
+            cloudname: 'sparkling',
+            preset: 'live.legrandfourire'
         },
         ziggeoGranted: true,
         ziggeoApiKey: '14372b7e9d5b5ba36818404d7f49ddd5',
@@ -17,6 +17,9 @@ export default createStore({
         mainSiteBase: 'https://legrandfourire.com'
     },
     getters: {
+        getCloudinaryConfig(state) {
+            return state.cloudinary
+        },
         getUserID(state) {
             return state.userID
         },

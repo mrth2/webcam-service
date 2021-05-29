@@ -1,7 +1,12 @@
 <template>
-  <div ref="recorder" class="box-shadow"></div>
+  <div class="row" style="position: relative">
+    <div ref="recorder" class="mx-auto"></div>
+  </div>
 </template>
 <script>
+import {mount} from '@/plugin/mounter'
+import CameraButton from './CameraButton.vue'
+
 export default {
   name: 'ZiggeoMirror',
   data() {
@@ -15,7 +20,7 @@ export default {
       element: this.$refs.recorder,
       attrs: {
         width: '100%',
-        height: 350,
+        height: 'auto',
         theme: 'elevate',
         themecolor: 'red',
         'flip-camera': true,
@@ -39,7 +44,29 @@ export default {
       }
     })
     this.recorder.activate()
-  }
+    this.recorder.on('ready_to_play', () => {
+      this.recorder.reset()
+    })
+
+    this.recorder.on('bound', () => {
+      const buttonContainer = this.$refs.recorder.querySelector('.ba-videorecorder-settings-button-container')
+      if (buttonContainer) {
+        /*const cameraButton = document.createElement('div')
+        cameraButton.id = 'customCameraButton'
+        buttonContainer.appendChild(cameraButton)*/
+
+        const {el} = mount(CameraButton, {
+          props: {
+            rootApp: this.$root,
+            recorder: this.recorder
+          },
+          app: this.$root
+        })
+        buttonContainer.appendChild(el)
+      }
+    })
+  },
+  methods: {}
 }
 </script>
 
@@ -53,7 +80,11 @@ export default {
 div[class^="ba-videorecorder-chooser-button-"] span, .ba-videorecorder-message-message {
   font-family: "Poppins", serif !important;
 }
+
 .ba-videorecorder-chooser-container {
-  background-color: #073653 !important;
+  background-color: #EE4A0B !important;
+}
+.ba-recorder-overlay .ba-commoncss-icon-state-good {
+  color: #EE4A0B !important;
 }
 </style>
