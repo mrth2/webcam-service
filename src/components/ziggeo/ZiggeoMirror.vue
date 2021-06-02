@@ -15,12 +15,16 @@ export default {
     }
   },
   inject: ['ziggeoApp'],
+  computed: {
+      snapshotInitialized() {
+        return this.$store.getters.snapshotInitialized
+      }
+  },
   mounted() {
     this.recorder = new window.ZiggeoApi.V2.Recorder({
       element: this.$refs.recorder,
       attrs: {
         width: '100%',
-        height: 'auto',
         theme: 'elevate',
         themecolor: 'red',
         'flip-camera': true,
@@ -49,20 +53,20 @@ export default {
     })
 
     this.recorder.on('bound', () => {
-      const buttonContainer = this.$refs.recorder.querySelector('.ba-videorecorder-settings-button-container')
-      if (buttonContainer) {
-        /*const cameraButton = document.createElement('div')
-        cameraButton.id = 'customCameraButton'
-        buttonContainer.appendChild(cameraButton)*/
-
-        const {el} = mount(CameraButton, {
-          props: {
-            rootApp: this.$root,
-            recorder: this.recorder
-          },
-          app: this.$root
-        })
-        buttonContainer.appendChild(el)
+      // only append camera button if snapshot button is not initialized
+      if (!this.snapshotInitialized) {
+        const buttonContainer = this.$refs.recorder.querySelector('.ba-videorecorder-settings-button-container')
+        if (buttonContainer) {
+          const {el} = mount(CameraButton, {
+            props: {
+              rootApp: this.$root,
+              recorder: this.recorder
+            },
+            app: this.$root
+          })
+          buttonContainer.appendChild(el)
+          this.$store.commit('setSnapshotInitialized', true)
+        }
       }
     })
   },
@@ -70,13 +74,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .box-shadow {
   background-color: #073653 !important;
 }
-</style>
 
-<style>
 div[class^="ba-videorecorder-chooser-button-"] span, .ba-videorecorder-message-message {
   font-family: "Poppins", serif !important;
 }

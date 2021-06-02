@@ -10,19 +10,19 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Upload this snapshot?</h5>
+            <h5 class="modal-title">Téléverser cette photo?</h5>
           </div>
           <div class="modal-body">
             <canvas id="snapshotCanvas" ref="snapshotCanvas" class="d-none"></canvas>
             <img class="img-fluid" alt="" :src="snapshotImage">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" @click="hideSnapshotModal">Cancel</button>
+            <button type="button" class="btn btn-secondary" @click="hideSnapshotModal">Annuler</button>
             <button
                 v-if="!uploading"
                 type="button" class="btn btn-primary"
                 @click="uploadSnapshot">
-              Upload this snapshot
+              Téléverser
             </button>
             <button
                 v-else
@@ -30,7 +30,7 @@
                 type="button" disabled
             >
               <span class="spinner-border spinner-border-sm align-middle mr-2" role="status" aria-hidden="true"></span>
-              Uploading...
+              Téléversement en cours
             </button>
           </div>
         </div>
@@ -130,7 +130,7 @@ export default {
             this.hideSnapshotModal()
 
             this.toast.show = true
-            this.toast.message = `Successfully upload your snapshot picture!`
+            this.toast.message = `Téléversement réussi!`
 
             // eslint-disable-next-line no-console
             console.log("upload to cloudinary:", result)
@@ -140,7 +140,7 @@ export default {
           })
           .catch(err => {
             this.toast.show = true
-            this.toast.message = 'Failed to upload your snapshot picture. Please contact the admin or try again later!'
+            this.toast.message = 'Échec du téléchargement!'
             this.toast.type = 'warning'
 
             console.log(`Upload to Cloudinary unsuccessful. Check settings.`)
