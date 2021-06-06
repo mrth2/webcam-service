@@ -1,10 +1,10 @@
 <template>
   <teleport to="body">
     <div id="modalGatherUserInfo" class="modal fade" tabindex="-1">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">{{ title }}</h5>
+            <h5 class="modal-title" v-html="title"></h5>
           </div>
           <div class="modal-body">
             <p>{{ message }}</p>
@@ -30,7 +30,7 @@
                 </div>
                 <div class="mb-3">
                   <label for="u-email" class="form-label">Courriel</label>
-                  <input type="email" class="form-control" id="u-email" placeholder="Entrez votre courriel"
+                  <input type="email" class="form-control" id="u-email" placeholder="Entrez votre adresse courriel"
                          aria-describedby="emailHelp" v-model="emailInput" required>
                   <div class="text-danger" v-if="error.email" v-html="error.email"></div>
                 </div>
@@ -43,7 +43,8 @@
                 <div class="mb-3">
                   <input class="form-check-input" type="checkbox" v-model="termAgreed" id="term-agreement" required>
                   <label class="form-check-label" style="margin-left: 10px;" for="term-agreement">
-                    J'accepte les conditions d'utilisation du site.
+                    <a href="https://legrandfourire.com/politique-de-confidentialite/" target="_blank">J'accepte les
+                      conditions d'utilisation du site.</a>
                   </label>
                   <div class="text-danger" v-if="error.term" v-html="error.term"></div>
                 </div>
@@ -66,7 +67,12 @@
 import helpers from '@/helpers/helpers.js'
 import Modal from 'bootstrap/js/dist/modal'
 
-const MODAL_TITLE = 'Merci d’entrer vos informations pour accéder à la diffusion en direct.'
+const MODAL_TITLE = `
+Pour avoir l’expérience du Grand fou rire la plus complète, nous vous recommandons d’autoriser l’utilisation de votre caméra et de votre micro. Votre signal vidéo ne sera pas transmis en direct lors de l’événement, mais votre caméra vous servira à créer un effet miroir, qui sera utile pour certains exercices. À certains moments, vous serez également invité(e) à CAPTURER des photos de vous en action ou à ENREGISTRER de courts clips vidéo de votre plus beau rire, qui seront directement envoyés à la Fondation québécoise du cancer. Le fait d’activer votre caméra et votre micro vous permettra d’utiliser ces fonctionnalités, si vous le souhaitez. En les utilisant, vous acceptez que la Fondation utilise ce matériel (capture photo ou court clip vidéo) dans ses activités de promotion et de communication.
+Et si vous n’avez pas de caméra ou de micro, pas de soucis! Vous aurez quand même une belle expérience.
+<br/><br/>
+Merci d’entrer vos renseignements pour accéder à la diffusion en direct.
+`
 const MODAL_MESSAGE = ''
 const MODAL_RESTORE_TITLE = MODAL_TITLE
 const MODAL_RESTORE_MESSAGE = ''
@@ -192,24 +198,32 @@ export default {
     }
   },
   mounted() {
-    if (this.name) this.nameInput.first = this.name
+    if (this.name) {
+      const frg = this.name.split(' ')
+      if (frg.length) {
+        this.nameInput.first = frg[0]
+        this.nameInput.last = frg.splice(1).join(' ')
+      } else {
+
+        this.nameInput.first = this.name
+      }
+    }
     if (this.email) this.emailInput = this.email
     if (this.location) this.locationInput = this.location
     // mixpanel
     this.$mixpanel.opt_in_tracking()
     const crispStoredEmail = this.$crisp.get('user:email')
-    console.log(crispStoredEmail)
     // process props
     if (this.$props.email && this.$props.name && this.$props.location) {
       // passed email from props is different from crisp session email
-      if (crispStoredEmail && this.$props.email !== crispStoredEmail) {
-        this.title = MODAL_RESTORE_TITLE
-        this.message = MODAL_RESTORE_MESSAGE
-        this.showModal()
-      } else {
-        this.syncCrisp()
-        this.syncMixpanel()
-      }
+      //if (crispStoredEmail && this.$props.email !== crispStoredEmail) {
+      this.title = MODAL_RESTORE_TITLE
+      this.message = MODAL_RESTORE_MESSAGE
+      this.showModal()
+      // } else {
+      //   this.syncCrisp()
+      //   this.syncMixpanel()
+      // }
     }
     // no stored email => show modal to gather
     else if (!crispStoredEmail) {
@@ -218,3 +232,18 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+.modal-title {
+  font-size: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .modal-title {
+    font-size: 12px;
+  }
+  label[for="term-agreement"] {
+    font-size: 14px;
+  }
+}
+</style>

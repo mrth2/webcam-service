@@ -12,7 +12,7 @@ export default {}
 header {
   text-align: center;
   img {
-    width: 450px;
+    width: 250px;
     margin: 50px 0;
   }
 }

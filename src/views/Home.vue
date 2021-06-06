@@ -11,15 +11,15 @@
             <div v-else>
               <img class="img-fluid" src="./../assets/CameraPermissionRequired.png" alt="">
             </div>
-            <div class="row mirror-info text-center px-5 m-auto mt-5 align-baseline">
-              This is the information about the live event, which will be added later!
+            <div class="row mirror-info text-center px-1 m-auto mt-3 align-baseline" style="font-size: 12px;">
+              L’effet miroir vous sera utile pour certains exercices! Votre caméra ainsi que votre micro activés vous permettront aussi de nous partager des images (photo ou vidéo) pour immortaliser le moment et créer un portrait de famille tout en rires! Si vous n’avez pas autorisé l’accès à votre caméra et à votre micro, vous ne pourrez pas utiliser l’outil miroir ou les fonctionnalités photo et vidéo. Mais n’ayez crainte! Ça ne vous empêchera pas de vivre l’expérience avec nous.
             </div>
           </div>
         </div>
       </div>
       <div class="row mt-xxl-5 text-center">
         <a href="https://www.jedonneenligne.org/fondationquebecoiseducancer/WGFR21/" target="_blank">
-          <div class="btn btn-primary">Faire un don</div>
+          <div class="btn btn-primary">DONNER</div>
         </a>
       </div>
     </div>

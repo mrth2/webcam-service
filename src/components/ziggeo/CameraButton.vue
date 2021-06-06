@@ -10,7 +10,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Téléverser cette photo?</h5>
+            <h5 class="modal-title">Envoyer cette photo instantanée?</h5>
           </div>
           <div class="modal-body">
             <canvas id="snapshotCanvas" ref="snapshotCanvas" class="d-none"></canvas>
@@ -22,7 +22,7 @@
                 v-if="!uploading"
                 type="button" class="btn btn-primary"
                 @click="uploadSnapshot">
-              Téléverser
+              Envoyer
             </button>
             <button
                 v-else
@@ -30,7 +30,7 @@
                 type="button" disabled
             >
               <span class="spinner-border spinner-border-sm align-middle mr-2" role="status" aria-hidden="true"></span>
-              Téléversement en cours
+              Envoi de votre photo en cours
             </button>
           </div>
         </div>
@@ -130,7 +130,7 @@ export default {
             this.hideSnapshotModal()
 
             this.toast.show = true
-            this.toast.message = `Téléversement réussi!`
+            this.toast.message = `Envoi réussi`
 
             // eslint-disable-next-line no-console
             console.log("upload to cloudinary:", result)

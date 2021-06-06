@@ -1,5 +1,5 @@
 <template>
-  <div class="row" style="position: relative">
+  <div class="row align-items-center text-center">
     <div ref="recorder" class="mx-auto"></div>
   </div>
 </template>
@@ -16,15 +16,17 @@ export default {
   },
   inject: ['ziggeoApp'],
   computed: {
-      snapshotInitialized() {
-        return this.$store.getters.snapshotInitialized
-      }
+    snapshotInitialized() {
+      return this.$store.getters.snapshotInitialized
+    }
   },
   mounted() {
+    const container = this.$el.parentNode
     this.recorder = new window.ZiggeoApi.V2.Recorder({
       element: this.$refs.recorder,
       attrs: {
-        width: '100%',
+        width: `${container.clientWidth}px`,
+        //height: container.clientHeight,
         theme: 'elevate',
         themecolor: 'red',
         'flip-camera': true,
@@ -43,12 +45,14 @@ export default {
         camerafacefront: true,
         allowmultistreams: true,
         timelimit: 10,
-        createthumbnails: true,
-        forcerefresh: true
+        forcerefresh: true,
+        webrtconmobile: true,
+        webrtcstreaming: true
       }
     })
     this.recorder.activate()
     this.recorder.on('ready_to_play', () => {
+      console.log('Ready to play')
       this.recorder.reset()
     })
 
@@ -69,6 +73,16 @@ export default {
         }
       }
     })
+    this.recorder.on("ready_to_record", () => {
+      // set width of recorder player
+      const recorder = this.$refs.recorder.querySelector('[data-selector="video-recorder-container"]')
+      const recorderPlayer = this.$refs.recorder.querySelector('[data-selector="recorder-player"]')
+      console.dir(recorder)
+      console.dir(recorderPlayer)
+      if (recorder && recorderPlayer) {
+        recorderPlayer.style.cssText += `width:${recorder.clientWidth}px;height:${recorder.clientHeight}px;`
+      }
+    })
   },
   methods: {}
 }
@@ -86,6 +100,7 @@ div[class^="ba-videorecorder-chooser-button-"] span, .ba-videorecorder-message-m
 .ba-videorecorder-chooser-container {
   background-color: #EE4A0B !important;
 }
+
 .ba-recorder-overlay .ba-commoncss-icon-state-good {
   color: #EE4A0B !important;
 }
